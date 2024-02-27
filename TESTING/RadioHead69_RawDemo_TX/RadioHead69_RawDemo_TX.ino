@@ -16,56 +16,12 @@
 // Change to 434.0 or other frequency, must match RX's freq!
 #define RF69_FREQ 915.0
 
-// First 3 here are boards w/radio BUILT-IN. Boards using FeatherWing follow.
-#if defined (__AVR_ATmega32U4__)  // Feather 32u4 w/Radio
-  #define RFM69_CS    8
-  #define RFM69_INT   7
-  #define RFM69_RST   4
-  #define LED        13
-
-#elif defined(ADAFRUIT_FEATHER_M0) || defined(ADAFRUIT_FEATHER_M0_EXPRESS) || defined(ARDUINO_SAMD_FEATHER_M0)  // Feather M0 w/Radio
-  #define RFM69_CS    8
-  #define RFM69_INT   3
-  #define RFM69_RST   4
-  #define LED        13
-
-#elif defined(ARDUINO_ADAFRUIT_FEATHER_RP2040_RFM)  // Feather RP2040 w/Radio
-  #define RFM69_CS   16
-  #define RFM69_INT  21
-  #define RFM69_RST  17
+  #define RFM69_CS   5  // "B"
+  #define RFM69_INT  9  // "A"
+  #define RFM69_RST  6  // same as LED
   #define LED        LED_BUILTIN
 
-#elif defined (__AVR_ATmega328P__)  // Feather 328P w/wing
-  #define RFM69_CS    4  //
-  #define RFM69_INT   3  //
-  #define RFM69_RST   2  // "A"
-  #define LED        13
 
-#elif defined(ESP8266)  // ESP8266 feather w/wing
-  #define RFM69_CS    2  // "E"
-  #define RFM69_INT  15  // "B"
-  #define RFM69_RST  16  // "D"
-  #define LED         0
-
-#elif defined(ARDUINO_ADAFRUIT_FEATHER_ESP32S2) || defined(ARDUINO_NRF52840_FEATHER) || defined(ARDUINO_NRF52840_FEATHER_SENSE)
-  #define RFM69_CS   10  // "B"
-  #define RFM69_INT   9  // "A"
-  #define RFM69_RST  11  // "C"
-  #define LED        13
-
-#elif defined(ESP32)  // ESP32 feather w/wing
-  #define RFM69_CS   33  // "B"
-  #define RFM69_INT  27  // "A"
-  #define RFM69_RST  13  // same as LED
-  #define LED        13
-
-#elif defined(ARDUINO_NRF52832_FEATHER)  // nRF52832 feather w/wing
-  #define RFM69_CS   11  // "B"
-  #define RFM69_INT  31  // "C"
-  #define RFM69_RST   7  // "A"
-  #define LED        17
-
-#endif
 
 /* Teensy 3.x w/wing
 #define RFM69_CS     10  // "B"
@@ -87,7 +43,7 @@ RH_RF69 rf69(RFM69_CS, RFM69_INT);
 int16_t packetnum = 0;  // packet counter, we increment per xmission
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(230400);
   //while (!Serial) delay(1); // Wait for Serial Console (comment out line if no computer)
 
   pinMode(LED, OUTPUT);
@@ -129,12 +85,17 @@ void setup() {
 void loop() {
   delay(1000);  // Wait 1 second between transmits, could also 'sleep' here!
 
-  char radiopacket[20] = "Hello World #";
-  itoa(packetnum++, radiopacket+13, 10);
+  while (Serial.available() == 0) {
+  }
+  String message = Serial.readString();
+
+  // Replace "Hello World" with your message string
+  String radiopacket = message;
+
   Serial.print("Sending "); Serial.println(radiopacket);
 
   // Send a message!
-  rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
+  rf69.send((uint8_t *)radiopacket.c_str(), radiopacket.length());
   rf69.waitPacketSent();
 
   // Now wait for a reply

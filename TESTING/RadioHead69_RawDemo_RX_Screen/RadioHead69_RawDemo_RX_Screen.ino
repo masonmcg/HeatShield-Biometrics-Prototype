@@ -10,8 +10,13 @@
 
 #include <SPI.h>
 #include <RH_RF69.h>
+#include <Adafruit_GFX.h>    // Core graphics library
+#include <Adafruit_ST7789.h> // Hardware-specific library for ST7789
+#include <SPI.h>
 
 /************ Radio Setup ***************/
+
+Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
 // Change to 434.0 or other frequency, must match RX's freq!
 #define RF69_FREQ 915.0
@@ -41,6 +46,28 @@ RH_RF69 rf69(RFM69_CS, RFM69_INT);
 void setup() {
   Serial.begin(115200);
   //while (!Serial) delay(1); // Wait for Serial Console (comment out line if no computer)
+
+  Serial.print(F("Hello! Feather TFT Test"));
+
+  // turn on backlite
+  pinMode(TFT_BACKLITE, OUTPUT);
+  digitalWrite(TFT_BACKLITE, HIGH);
+
+  // turn on the TFT / I2C power supply
+  pinMode(TFT_I2C_POWER, OUTPUT);
+  digitalWrite(TFT_I2C_POWER, HIGH);
+  delay(10);
+
+  // initialize TFT
+  tft.init(135, 240); // Init ST7789 240x135
+  tft.setRotation(3);
+  tft.fillScreen(ST77XX_BLACK);
+
+  Serial.println(F("Initialized"));
+
+
+
+
 
   pinMode(LED, OUTPUT);
   pinMode(RFM69_RST, OUTPUT);
@@ -94,6 +121,8 @@ void loop() {
       Serial.print("RSSI: ");
       Serial.println(rf69.lastRssi(), DEC);
 
+      printMessage((char*)buf);
+
       if (strstr((char *)buf, "Hello World")) {
         // Send a reply!
         uint8_t data[] = "And hello back to you";
@@ -115,4 +144,18 @@ void Blink(byte pin, byte delay_ms, byte loops) {
     digitalWrite(pin, LOW);
     delay(delay_ms);
   }
+}
+
+// Function to print a message to the screen
+void printMessage(const char* text) {
+  // Clear the screen
+  tft.fillScreen(ST77XX_BLACK);
+  
+  // Set text color, size, and position
+  tft.setCursor(0, 30);
+  tft.setTextColor(ST77XX_WHITE);
+  tft.setTextSize(2);
+  
+  // Print the message
+  tft.println(text);
 }

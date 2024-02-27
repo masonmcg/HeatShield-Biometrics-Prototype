@@ -4,7 +4,7 @@ Adafruit_MAX17048 maxlipo;
 
 void setup() {
   Serial.begin(115200);
-  while (!Serial) delay(10);    // wait until serial monitor opens
+//  while (!Serial) delay(10);    // wait until serial monitor opens
 
   Serial.println(F("\nAdafruit MAX17048 simple demo"));
 

@@ -17,7 +17,7 @@ bool addr0x36 = true;
 
 void setup() {
   Serial.begin(115200);
-  while (!Serial) delay(10);    // wait until serial monitor opens
+  //while (!Serial) delay(10);    // wait until serial monitor opens
   Serial.println(F("\nAdafruit Battery Monitor simple demo"));
   // if no max17048..
   if (!maxlipo.begin()) {
