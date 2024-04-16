@@ -14,6 +14,7 @@ Collects sensor data at regular intervals
 
 Device is in recieve mode until button pressed to send
 
+Device vibrates haptic feedback sensor when recieves message
 
 
 
