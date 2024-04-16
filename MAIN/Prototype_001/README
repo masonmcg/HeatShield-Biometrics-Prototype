@@ -1,1 +1,26 @@
+DEVICE FUNCTIONALITY:
 
+Screen displays device name, battery percentage, sensor data, messages sent/recieved
+
+Battery percentage monitored
+
+Connects to phone over wifi to program device name
+
+Communicates to other device over LoRa
+
+Collects sensor data at regular intervals
+
+2 buttons, each sends a different message
+
+Device is in recieve mode until button pressed to send
+
+
+
+
+CODE ORGANIZATION:
+
+Each sensor/battery/screen/chip has its own 'library' file where all its functions are written
+
+Executable code is written in the 'main' file
+
+Refer to schematic for pinouts
