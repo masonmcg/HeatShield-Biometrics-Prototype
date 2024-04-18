@@ -5,7 +5,7 @@
 // Use dedicated hardware SPI pins
 Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
-void setup(void) {
+void displayInit(void) {
   Serial.begin(9600);
   Serial.print(F("Hello! Feather TFT Test"));
 
@@ -26,7 +26,7 @@ void setup(void) {
   Serial.println(F("Initialized"));
 }
 
-void printMessage(int lineNumber, const char* text) {
+void displayPrint(int lineNumber, const char* text) {
   // Clear the screen
   tft.fillScreen(ST77XX_BLACK);
   
