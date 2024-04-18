@@ -1,20 +1,4 @@
-/**************************************************************************
-  This is a library for several Adafruit displays based on ST77* drivers.
-
-  Works with the Adafruit ESP32-S2 TFT Feather
-    ----> http://www.adafruit.com/products/5300
-
-  Check out the links above for our tutorials and wiring diagrams.
-
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit and open-source hardware by purchasing
-  products from Adafruit!
-
-  Written by Limor Fried/Ladyada for Adafruit Industries.
-  MIT license, all text above must be included in any redistribution
- **************************************************************************/
-
-#include <Adafruit_GFX.h>    // Core graphics library
+//#include <Adafruit_GFX.h>    // Core graphics library
 #include <Adafruit_ST7789.h> // Hardware-specific library for ST7789
 #include <SPI.h>
 
@@ -41,17 +25,6 @@ void setup(void) {
 
   Serial.println(F("Initialized"));
 }
-
-void loop() {
-  // Call the function to print the message with the specified text
-  printMessage(1, "Hello, World!");
-
-  // Delay to control the message update rate
-  delay(2000);
-  printMessage(2, "Stuff");
-  delay(2000);
-}
-
 
 void printMessage(int lineNumber, const char* text) {
   // Clear the screen
