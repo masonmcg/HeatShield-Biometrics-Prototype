@@ -5,8 +5,10 @@
 // Use dedicated hardware SPI pins
 Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
+
+// function displayInit
+// sets up the display for use
 void displayInit(void) {
-  Serial.begin(9600);
   Serial.print(F("Hello! Feather TFT Test"));
 
   // turn on backlite
@@ -23,17 +25,21 @@ void displayInit(void) {
   tft.setRotation(3);
   tft.fillScreen(ST77XX_BLACK);
 
-  Serial.println(F("Initialized"));
+  Serial.println(F("Display Initialized"));
 }
 
-void displayPrint(int lineNumber, const char* text) {
-  // Clear the screen
-  tft.fillScreen(ST77XX_BLACK);
+// function displayPrint
+// takes a line number, clears, then displays given text in given color
+void displayPrint(int lineNumber, const char* text, uint16_t textColor) {
+  // Calculate the y position of the selected line
+  int yPosition = lineNumber * 20; // Assuming each line has a height of 20 pixels
+  
+  // Clear only the area of the selected line
+  tft.fillRect(0, yPosition, tft.width(), 20, ST77XX_BLACK);
   
   // Set text color, size, and position
-  int yPosition = lineNumber * 20; // Assuming each line has a height of 20 pixels
   tft.setCursor(0, yPosition);
-  tft.setTextColor(ST77XX_WHITE);
+  tft.setTextColor(textColor); // Set text color based on the input parameter
   tft.setTextSize(2);
   
   // Print the message
