@@ -1,6 +1,6 @@
 DEVICE FUNCTIONALITY:
 
-Screen displays device name, battery percentage, sensor data, messages sent/recieved
+Screen displays device name, battery percentage, sensor data, messages sent/recieved, if touching skin or not
 
 Battery percentage monitored
 
@@ -15,6 +15,8 @@ Collects sensor data at regular intervals
 Device is in recieve mode until button pressed to send
 
 Device vibrates haptic feedback sensor when recieves message
+
+Device monitors touch sensors and indicates when on a wrist
 
 
 
