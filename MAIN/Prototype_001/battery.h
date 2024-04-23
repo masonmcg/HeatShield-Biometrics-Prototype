@@ -18,3 +18,12 @@ void batteryInit() {
 int batteryGetPercentage() {
   return maxlipo.cellPercent();
 }
+
+// function batteryGetPercentageString
+// returns battery percentage as a C-style string (const char*)
+const char* batteryGetPercentageString() {
+  static char buffer[10]; // Assuming the percentage will fit in a 10-character buffer
+  int percentage = maxlipo.cellPercent();
+  snprintf(buffer, sizeof(buffer), "%d%%", percentage);
+  return buffer;
+}

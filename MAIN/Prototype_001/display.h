@@ -5,7 +5,6 @@
 // Use dedicated hardware SPI pins
 Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
-
 // function displayInit
 // sets up the display for use
 void displayInit(void) {
