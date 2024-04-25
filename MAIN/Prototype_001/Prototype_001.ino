@@ -1,6 +1,7 @@
 #include "display.h"
 #include "battery.h"
 #include "optical.h"
+#include "temperature.h"
 
 void setup() {
   // put your setup code here, to run once:
@@ -10,6 +11,7 @@ void setup() {
   batteryInit();
   opticalInit();
   //loraInit();
+  temperatureInit();
 }
 
 void loop() {
@@ -21,6 +23,9 @@ void loop() {
   delay(100);
 
   displayPrint(3, opticalGetHeartRateString(), ST77XX_RED);
+  delay(100);
+
+  displayPrint(4, temperatureGetTempString(), ST77XX_RED);
   delay(100);
 
   //example lora stuff below
