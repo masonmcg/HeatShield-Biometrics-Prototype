@@ -5,9 +5,9 @@ const int buttonD2 = 2; // D2 button pin
 // function buttonInit
 // sets up buttons for use
 void buttonInit() {
-  pinMode(buttonD0, INPUT); // Initialize D0 button as input
-  pinMode(buttonD1, INPUT); // Initialize D1 button as input
-  pinMode(buttonD2, INPUT); // Initialize D2 button as input
+  pinMode(buttonD0, INPUT_PULLUP); // Initialize D0 button as input
+  pinMode(buttonD1, INPUT_PULLDOWN); // Initialize D1 button as input
+  pinMode(buttonD2, INPUT_PULLDOWN); // Initialize D2 button as input
 }
 
 // function buttonD0
