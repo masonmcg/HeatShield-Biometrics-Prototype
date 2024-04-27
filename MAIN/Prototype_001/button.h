@@ -5,9 +5,11 @@ const int buttonD2 = 2; // D2 button pin
 // function buttonInit
 // sets up buttons for use
 void buttonInit() {
+  Serial.println("buttonInit start");
   pinMode(buttonD0, INPUT_PULLUP); // Initialize D0 button as input
   pinMode(buttonD1, INPUT_PULLDOWN); // Initialize D1 button as input
   pinMode(buttonD2, INPUT_PULLDOWN); // Initialize D2 button as input
+  Serial.println("buttonInit complete");
 }
 
 // function buttonD0

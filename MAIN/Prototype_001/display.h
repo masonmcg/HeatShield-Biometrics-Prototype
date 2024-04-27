@@ -87,3 +87,43 @@ void displayDemo4() {
   displayPrint(1,"iQ Demo", ST77XX_WHITE);
   displayPrint(3,"ALERT - heat stress warning for john doe", ST77XX_WHITE);
 }
+
+// function displayDemo5
+// iQ demo screen "transmission failed - retrying"
+void displayDemo5() {
+  currentBackground = ST77XX_WHITE;
+  tft.fillScreen(currentBackground);
+  displayPrint(0,"HeatShield Biometrics", ST77XX_ORANGE);
+  displayPrint(1,"iQ Demo", ST77XX_ORANGE);
+  displayPrint(3,"transmission failed", ST77XX_ORANGE);
+  displayPrint(4,"retrying...", ST77XX_ORANGE);
+}
+
+// function displayDemo6
+// iQ demo screen "transmission success"
+void displayDemo6() {
+  currentBackground = ST77XX_WHITE;
+  tft.fillScreen(currentBackground);
+  displayPrint(0,"HeatShield Biometrics", ST77XX_ORANGE);
+  displayPrint(1,"iQ Demo", ST77XX_ORANGE);
+  displayPrint(3,"transmission success", ST77XX_ORANGE);
+}
+
+// function displayDemo7
+// iQ demo screen "transmission failed - giving up"
+void displayDemo7() {
+  currentBackground = ST77XX_WHITE;
+  tft.fillScreen(currentBackground);
+  displayPrint(0,"HeatShield Biometrics", ST77XX_ORANGE);
+  displayPrint(1,"iQ Demo", ST77XX_ORANGE);
+  displayPrint(3,"transmission failed", ST77XX_ORANGE);
+  displayPrint(4,"giving up", ST77XX_ORANGE);
+}
+
+// function displayPowerOff
+// displays powering down screen before powering down
+void displayPowerOff() {
+  currentBackground = ST77XX_BLACK;
+  tft.fillScreen(currentBackground);
+  displayPrint(3,"powering down", ST77XX_WHITE);
+}

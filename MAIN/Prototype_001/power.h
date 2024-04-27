@@ -10,5 +10,7 @@ void powerInit() {
 // turns off all peripherals, then turns off the ESP32
 void powerOff() {
   // add other functions here to turn off other sensors??
+  displayPowerOff();
+  delay(2000);
   esp_deep_sleep_start();
 }

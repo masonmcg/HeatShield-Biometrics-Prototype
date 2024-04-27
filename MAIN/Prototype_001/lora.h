@@ -38,6 +38,8 @@
 // Singleton instance of the radio driver
 RH_RF69 rf69(RFM69_CS, RFM69_INT);
 
+int16_t packetnum = 0;  // packet counter, we increment per xmission
+
 // function loraInit
 // sets up the lora chip for use
 void loraInit() {
@@ -47,6 +49,9 @@ void loraInit() {
   pinMode(RFM69_RST, OUTPUT);
   digitalWrite(RFM69_RST, LOW);
 
+  Serial.println("Feather RFM69 TX Test!");
+  Serial.println();
+
   // manual reset
   digitalWrite(RFM69_RST, HIGH);
   delay(10);
@@ -54,15 +59,14 @@ void loraInit() {
   delay(10);
 
   if (!rf69.init()) {
-    Serial.println("loraInit failed");
+    Serial.println("RFM69 radio init failed");
     while (1);
   }
-  Serial.println("loraInit OK!");
-
+  Serial.println("RFM69 radio init OK!");
   // Defaults after init are 434.0MHz, modulation GFSK_Rb250Fd250, +13dbM (for low power module)
   // No encryption
   if (!rf69.setFrequency(RF69_FREQ)) {
-    Serial.println("loraInit setFrequency failed");
+    Serial.println("setFrequency failed");
   }
 
   // If you are using a high power RF69 eg RFM69HW, you *must* set a Tx power with the
@@ -74,19 +78,36 @@ void loraInit() {
                     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
   rf69.setEncryptionKey(key);
 
+  Serial.print("RFM69 radio @");  Serial.print((int)RF69_FREQ);  Serial.println(" MHz");
+
   Serial.println("loraInit complete");
 }
 
 // function loraRX
 // checks for a LoRa transmission and returns it as a C-style string (const char*)
-// if no message to recieve, returns "no message"
-const char* loraRX() {
- if (rf69.available()) {
+// if no LoRa transmission it returns "RX fail"
+bool loraRX(void) {
+  /*
+  if (rf69.available()) {
+    uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
+    uint8_t len = sizeof(buf);
+    if (rf69.recv(buf, &len)) {
+        return (char*)buf;
+      }
+    else {
+        return "RX fail";
+    }
+  }
+  else {
+    return "RX fail";
+  }
+  */
+  if (rf69.available()) {
     // Should be a message for us now
     uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
     uint8_t len = sizeof(buf);
     if (rf69.recv(buf, &len)) {
-      if (!len) return;
+      if (!len) return false;
       buf[len] = 0;
       Serial.print("Received [");
       Serial.print(len);
@@ -95,67 +116,61 @@ const char* loraRX() {
       Serial.print("RSSI: ");
       Serial.println(rf69.lastRssi(), DEC);
 
-      return (char*)buf;
-
-      /*
-      if (strstr((char *)buf, "Hello World")) {
-        // Send a reply!
-        uint8_t data[] = "And hello back to you";
-        rf69.send(data, sizeof(data));
-        rf69.waitPacketSent();
-        Serial.println("Sent a reply");
-        Blink(LED, 40, 3); // blink LED 3 times, 40ms between blinks
+      if (strstr((char *)buf, "heat stress")) {
+        return true;
       }
     } else {
       Serial.println("Receive failed");
+      return false;
     }
-    */
-
   }
-  else
-    return "no message";
+
+
 }
 
 // function loraTX
-// takes a String and transmits over LoRa
-void loraTX(String message) {
+// takes a C-style string (const char*) and transmits over LoRa
+void loraTX(void) {
+  //rf69.send((uint8_t *)message, strlen(message));
+  //rf69.waitPacketSent();
 
-  String radiopacket = message;
-
+  char radiopacket[20] = "heat stress";
+  itoa(packetnum++, radiopacket+13, 10);
   Serial.print("Sending "); Serial.println(radiopacket);
 
   // Send a message!
-  rf69.send((uint8_t *)radiopacket.c_str(), radiopacket.length());
+  rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
   rf69.waitPacketSent();
-
-  /*
-  // Now wait for a reply
-  uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
-  uint8_t len = sizeof(buf);
-
-  if (rf69.waitAvailableTimeout(500)) {
-    // Should be a reply message for us now
-    if (rf69.recv(buf, &len)) {
-      Serial.print("Got a reply: ");
-      Serial.println((char*)buf);
-      Blink(LED, 50, 3); // blink LED 3 times, 50ms between blinks
-    } else {
-      Serial.println("Receive failed");
-    }
-  } else {
-    Serial.println("No reply, is another RFM69 listening?");
-  }
-  */
-
 }
 
-// function blink
-// some stupid included thing -- ignore??
-void Blink(byte pin, byte delay_ms, byte loops) {
-  while (loops--) {
-    digitalWrite(pin, HIGH);
-    delay(delay_ms);
-    digitalWrite(pin, LOW);
-    delay(delay_ms);
+/*
+// function loraHeatStressTX
+// send a heat stress signal over lora and waits to recieve valid return signal
+// returns true if heat stress signal successfully sent
+// returns false if not
+bool loraHeatStressTX() {
+  loraTX("heat stress event");
+  const char* RXcheck = loraRX();
+  if (strcmp(RXcheck, "valid") == 0) { // if RXcheck is "valid"
+    return true;
+  }
+  else {
+    return false;
   }
 }
+
+// function loraHeatStressRX
+// checks to recieve heat stress signal over lora, sends valid signal back if successful
+// returns true if heat stress signal successfully recieved
+// returns false if not
+bool loraHeatStressRX() {
+  const char* message = loraRX();
+  if (strcmp(message, "heat stress event") == 0) { // if message is "heat stress event"
+    loraTX("valid");
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+*/
