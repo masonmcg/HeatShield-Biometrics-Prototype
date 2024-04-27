@@ -5,12 +5,13 @@ Adafruit_MAX17048 maxlipo;
 // function batteryInit
 // initializes battery stuff and prints status
 void batteryInit() {
+  Serial.println("batteryInit start");
   if (!maxlipo.begin()) {
-    Serial.println(F("Could not find Adafruit MAX17048?"));
-    Serial.println(F("Make sure a battery is plugged in!"));
+    Serial.println("Could not find Adafruit MAX17048?");
+    Serial.println("Make sure a battery is plugged in!");
     while (1) delay(10);
   }
-  Serial.println(F("Battery monitor initialized"));
+  Serial.println("batteryInit complete");
 }
 
 // function batteryGetPercentage

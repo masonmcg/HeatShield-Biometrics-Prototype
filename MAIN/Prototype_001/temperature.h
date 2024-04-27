@@ -17,7 +17,7 @@ Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
 // function temperatureInit
 // sets up the temperature sensor for use
 void temperatureInit() {
-  Serial.println("MCP9808 initializing...");
+  Serial.println("temperatureInit start");
   
   // Make sure the sensor is found, you can also pass in a different i2c
   // address with tempsensor.begin(0x19) for example, also can be left in blank for default address use
@@ -33,11 +33,11 @@ void temperatureInit() {
   //  1  1  0   0x1E
   //  1  1  1   0x1F
   if (!tempsensor.begin(0x18)) {
-    Serial.println("Couldn't find MCP9808! Check your connections and verify the address is correct.");
+    Serial.println("tempInit couldn't find MCP9808! Check your connections and verify the address is correct.");
     while (1);
   }
     
-   Serial.println("Found MCP9808!");
+  Serial.println("tempInit Found MCP9808!");
 
   tempsensor.setResolution(3); // sets the resolution mode of reading, the modes are defined in the table bellow:
   // Mode Resolution SampleTime
@@ -45,6 +45,8 @@ void temperatureInit() {
   //  1    0.25°C      65 ms
   //  2    0.125°C     130 ms
   //  3    0.0625°C    250 ms
+
+  Serial.println("temperatureInit complete");
 }
 
 // function temperatureGetTempString
