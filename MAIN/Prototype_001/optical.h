@@ -15,7 +15,7 @@ int beatAvg;
 // function opticalInit
 // sets up the optical heart rate sensor for use
 void opticalInit(void) {
-  Serial.println("Initializing optical...");
+  Serial.println("opticalInit start");
 
   // Initialize sensor
   if (!particleSensor.begin(Wire, I2C_SPEED_FAST)) {
@@ -27,6 +27,8 @@ void opticalInit(void) {
   particleSensor.setup(); //Configure sensor with default settings
   particleSensor.setPulseAmplitudeRed(0x0A); //Turn Red LED to low to indicate sensor is running
   particleSensor.setPulseAmplitudeGreen(0); //Turn off Green LED
+  
+  Serial.println("displayInit complete");
 }
 
 // function opticalGetHeartRateString

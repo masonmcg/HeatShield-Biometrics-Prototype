@@ -41,12 +41,11 @@ RH_RF69 rf69(RFM69_CS, RFM69_INT);
 // function loraInit
 // sets up the lora chip for use
 void loraInit() {
+  Serial.println("loraInit start");
+
   pinMode(LED, OUTPUT);
   pinMode(RFM69_RST, OUTPUT);
   digitalWrite(RFM69_RST, LOW);
-
-  Serial.println("Feather RFM69 RX Test!");
-  Serial.println();
 
   // manual reset
   digitalWrite(RFM69_RST, HIGH);
@@ -55,15 +54,15 @@ void loraInit() {
   delay(10);
 
   if (!rf69.init()) {
-    Serial.println("RFM69 radio init failed");
+    Serial.println("loraInit failed");
     while (1);
   }
-  Serial.println("RFM69 radio init OK!");
+  Serial.println("loraInit OK!");
 
   // Defaults after init are 434.0MHz, modulation GFSK_Rb250Fd250, +13dbM (for low power module)
   // No encryption
   if (!rf69.setFrequency(RF69_FREQ)) {
-    Serial.println("setFrequency failed");
+    Serial.println("loraInit setFrequency failed");
   }
 
   // If you are using a high power RF69 eg RFM69HW, you *must* set a Tx power with the
@@ -75,7 +74,7 @@ void loraInit() {
                     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
   rf69.setEncryptionKey(key);
 
-  Serial.print("RFM69 radio @");  Serial.print((int)RF69_FREQ);  Serial.println(" MHz");
+  Serial.println("loraInit complete");
 }
 
 // function loraRX

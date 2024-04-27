@@ -5,10 +5,12 @@
 // Use dedicated hardware SPI pins
 Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
+int currentBackground = ST77XX_WHITE;
+
 // function displayInit
 // sets up the display for use
 void displayInit(void) {
-  Serial.print(F("Hello! Feather TFT Test"));
+  Serial.println("displayInit start");
 
   // turn on backlite
   pinMode(TFT_BACKLITE, OUTPUT);
@@ -22,9 +24,9 @@ void displayInit(void) {
   // initialize TFT
   tft.init(135, 240); // Init ST7789 240x135
   tft.setRotation(3);
-  tft.fillScreen(ST77XX_BLACK);
+  tft.fillScreen(currentBackground);
 
-  Serial.println(F("Display Initialized"));
+  Serial.println("displayInit complete");
 }
 
 // function displayPrint
@@ -34,7 +36,7 @@ void displayPrint(int lineNumber, const char* text, uint16_t textColor) {
   int yPosition = lineNumber * 20; // Assuming each line has a height of 20 pixels
   
   // Clear only the area of the selected line
-  tft.fillRect(0, yPosition, tft.width(), 20, ST77XX_BLACK);
+  tft.fillRect(0, yPosition, tft.width(), 20, currentBackground);
   
   // Set text color, size, and position
   tft.setCursor(0, yPosition);
@@ -43,4 +45,45 @@ void displayPrint(int lineNumber, const char* text, uint16_t textColor) {
   
   // Print the message
   tft.println(text);
+}
+
+// function displayDemo1
+// iQ demo screen "press to simulate alert"
+void displayDemo1() {
+  currentBackground = ST77XX_WHITE;
+  tft.fillScreen(currentBackground);
+  displayPrint(0,"HeatShield Biometrics", ST77XX_ORANGE);
+  displayPrint(1,"iQ Demo", ST77XX_ORANGE);
+  displayPrint(3,"<- press to simulate alert", ST77XX_ORANGE);
+}
+
+// function displayDemo2
+// iQ demo screen "HEAT STRESS WARNING"
+void displayDemo2() {
+  currentBackground = ST77XX_RED;
+  tft.fillScreen(currentBackground);
+  displayPrint(0,"HeatShield Biometrics", ST77XX_WHITE);
+  displayPrint(1,"iQ Demo", ST77XX_WHITE);
+  displayPrint(3,"HEAT STRESS WARNING", ST77XX_WHITE);
+  displayPrint(4,"take a break", ST77XX_WHITE);
+}
+
+// function displayDemo3
+// iQ demo screen "waiting for alert"
+void displayDemo3() {
+  currentBackground = ST77XX_WHITE;
+  tft.fillScreen(currentBackground);
+  displayPrint(0,"HeatShield Biometrics", ST77XX_ORANGE);
+  displayPrint(1,"iQ Demo", ST77XX_ORANGE);
+  displayPrint(3,"waiting for alert", ST77XX_ORANGE);
+}
+
+// function displayDemo4
+// iQ demo screen "ALERT - heat stress warning for john doe"
+void displayDemo4() {
+  currentBackground = ST77XX_RED;
+  tft.fillScreen(currentBackground);
+  displayPrint(0,"HeatShield Biometrics", ST77XX_WHITE);
+  displayPrint(1,"iQ Demo", ST77XX_WHITE);
+  displayPrint(3,"ALERT - heat stress warning for john doe", ST77XX_WHITE);
 }
