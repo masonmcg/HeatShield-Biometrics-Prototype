@@ -7,6 +7,7 @@
 #include "haptic.h"
 #include "power.h"
 #include "lora.h"
+#include "probe.h"
 
 bool cheifWatch = true; // select true if cheifWatch, false if crewWatch
 
@@ -23,6 +24,7 @@ void setup() {
   buttonInit();
   //hapticInit();
   //powerInit();
+  //probeInit();
   
   // below code chooses starting screen based on which type watch
   if(cheifWatch) {
