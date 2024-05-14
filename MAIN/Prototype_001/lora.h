@@ -84,24 +84,9 @@ void loraInit() {
 }
 
 // function loraRX
-// checks for a LoRa transmission and returns it as a C-style string (const char*)
-// if no LoRa transmission it returns "RX fail"
+// checks for lora transmission and returns true if message is "heat stress"
+// returns false otherwise
 bool loraRX(void) {
-  /*
-  if (rf69.available()) {
-    uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
-    uint8_t len = sizeof(buf);
-    if (rf69.recv(buf, &len)) {
-        return (char*)buf;
-      }
-    else {
-        return "RX fail";
-    }
-  }
-  else {
-    return "RX fail";
-  }
-  */
   if (rf69.available()) {
     // Should be a message for us now
     uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
@@ -124,16 +109,11 @@ bool loraRX(void) {
       return false;
     }
   }
-
-
 }
 
 // function loraTX
-// takes a C-style string (const char*) and transmits over LoRa
+// sends a string "heat stress" over lora
 void loraTX(void) {
-  //rf69.send((uint8_t *)message, strlen(message));
-  //rf69.waitPacketSent();
-
   char radiopacket[20] = "heat stress";
   itoa(packetnum++, radiopacket+13, 10);
   Serial.print("Sending "); Serial.println(radiopacket);
@@ -142,35 +122,3 @@ void loraTX(void) {
   rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
   rf69.waitPacketSent();
 }
-
-/*
-// function loraHeatStressTX
-// send a heat stress signal over lora and waits to recieve valid return signal
-// returns true if heat stress signal successfully sent
-// returns false if not
-bool loraHeatStressTX() {
-  loraTX("heat stress event");
-  const char* RXcheck = loraRX();
-  if (strcmp(RXcheck, "valid") == 0) { // if RXcheck is "valid"
-    return true;
-  }
-  else {
-    return false;
-  }
-}
-
-// function loraHeatStressRX
-// checks to recieve heat stress signal over lora, sends valid signal back if successful
-// returns true if heat stress signal successfully recieved
-// returns false if not
-bool loraHeatStressRX() {
-  const char* message = loraRX();
-  if (strcmp(message, "heat stress event") == 0) { // if message is "heat stress event"
-    loraTX("valid");
-    return true;
-  }
-  else {
-    return false;
-  }
-}
-*/
