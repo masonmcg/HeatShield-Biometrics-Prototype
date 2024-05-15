@@ -120,6 +120,33 @@ void displayDemo7() {
   displayPrint(4,"giving up", ST77XX_ORANGE);
 }
 
+// function displayLoraTx1
+// lora test screen for Tx device
+// prints line that says what number message was sent
+void displayLoraTx1(int number) {
+  currentBackground = ST77XX_WHITE;
+  tft.fillScreen(currentBackground);
+  String msg = "Sent msg #" + String(number);
+  displayPrint(0,"LoRa range test", ST77XX_ORANGE);
+  displayPrint(1,"Tx Device", ST77XX_ORANGE);
+  displayPrint(2,"Press D1 to transmit", ST77XX_ORANGE);
+  displayPrint(4, msg.c_str(), ST77XX_ORANGE);
+}
+
+// function displayLoraRx1
+// lora test screen for Rx device
+// prints line that says what number was recieved and RSSI
+void displayLoraRx1(int number, int RSSI) {
+  currentBackground = ST77XX_WHITE;
+  tft.fillScreen(currentBackground);
+  String msg = "Received msg #" + String(number);
+  String rssiMsg = "RSSI: " + String(RSSI);
+  displayPrint(0,"LoRa range test", ST77XX_ORANGE);
+  displayPrint(1,"Rx Device", ST77XX_ORANGE);
+  displayPrint(3, msg.c_str(), ST77XX_ORANGE);
+  displayPrint(4, rssiMsg.c_str(), ST77XX_ORANGE);
+}
+
 // function displayPowerOff
 // displays powering down screen before powering down
 void displayPowerOff() {

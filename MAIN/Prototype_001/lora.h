@@ -21,20 +21,6 @@
 #define RFM69_RST  6  // same as LED
 #define LED        LED_BUILTIN
 
-/* Teensy 3.x w/wing
-#define RFM69_CS     10  // "B"
-#define RFM69_INT     4  // "C"
-#define RFM69_RST     9  // "A"
-#define RFM69_IRQN   digitalPinToInterrupt(RFM69_INT)
-*/
-
-/* WICED Feather w/wing
-#define RFM69_CS     PB4  // "B"
-#define RFM69_INT    PA15 // "C"
-#define RFM69_RST    PA4  // "A"
-#define RFM69_IRQN   RFM69_INT
-*/
-
 // Singleton instance of the radio driver
 RH_RF69 rf69(RFM69_CS, RFM69_INT);
 
@@ -84,41 +70,41 @@ void loraInit() {
 }
 
 // function loraRX
-// checks for lora transmission and returns true if message is "heat stress"
-// returns false otherwise
-bool loraRX(void) {
+// checks for lora transmission and returns message received as String
+// returns "Receive failed" otherwise
+String loraRX(void) {
   if (rf69.available()) {
     // Should be a message for us now
     uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
     uint8_t len = sizeof(buf);
     if (rf69.recv(buf, &len)) {
-      if (!len) return false;
+      if (!len) return "Receive failed";
       buf[len] = 0;
-      Serial.print("Received [");
-      Serial.print(len);
-      Serial.print("]: ");
-      Serial.println((char*)buf);
-      Serial.print("RSSI: ");
-      Serial.println(rf69.lastRssi(), DEC);
+      //Serial.print("Received [");
+      //Serial.print(len);
+      //Serial.print("]: ");
+      //Serial.println((char*)buf);
+      //Serial.print("RSSI: ");
+      //Serial.println(rf69.lastRssi(), DEC);
 
-      if (strstr((char *)buf, "heat stress")) {
-        return true;
-      }
+      return String((char*)buf);
     } else {
-      Serial.println("Receive failed");
-      return false;
+      return "Receive failed";
     }
+  } else {
+    return "Receive failed";
   }
 }
 
 // function loraTX
-// sends a string "heat stress" over lora
-void loraTX(void) {
-  char radiopacket[20] = "heat stress";
-  itoa(packetnum++, radiopacket+13, 10);
-  Serial.print("Sending "); Serial.println(radiopacket);
-
-  // Send a message!
-  rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
+// sends a String radiopacket over lora
+void loraTX(String radiopacket) {
+  rf69.send((uint8_t *)radiopacket.c_str(), radiopacket.length());
   rf69.waitPacketSent();
+}
+
+// function loraGetRSSI
+// returns last RSSI
+int loraGetRSSI() {
+  return rf69.lastRssi();
 }

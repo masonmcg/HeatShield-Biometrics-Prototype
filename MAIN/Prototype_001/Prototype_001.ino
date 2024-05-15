@@ -1,4 +1,3 @@
-
 #include "display.h"
 #include "battery.h"
 #include "optical.h"
@@ -7,9 +6,10 @@
 #include "haptic.h"
 #include "power.h"
 #include "lora.h"
-#include "probe.h"
+//#include "probe.h"
 
-bool cheifWatch = true; // select true if cheifWatch, false if crewWatch
+bool txDevice = true; // select true if Tx device, false if Rx device
+int messageCount = 0;  // messageCount varible for LoRa testing
 
 void setup() {
   // put your setup code here, to run once:
@@ -26,44 +26,37 @@ void setup() {
   //powerInit();
   //probeInit();
   
-  // below code chooses starting screen based on which type watch
-  if(cheifWatch) {
-    displayDemo3();
+  // below code chooses starting screen based on which device
+  if(txDevice) {
+    displayLoraTx1(0);
   }
   else {
-    displayDemo1();
+    displayLoraRx1(0, 0);
   }
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   
-  // if this is cheif watch, do cheif watch things like wait for alerts
-  if(cheifWatch) {
-    if(loraRX()) {
-      displayDemo4();        // go to alert recieved screen
-      delay(4000);           // delay so user can read alert screen
-      displayDemo3();        // go back to waiting screen
+  // if this is txDevice, do Tx things
+  if(txDevice) {
+    if(buttonPressD1()) {                    // buttonPressD1 sends next message
+      messageCount += 1;                     // increment message count
+      String message = String(messageCount); // cast messageCount int to String
+      loraTX(message);                       // transmit message String over lora
+      displayLoraTx1(messageCount);          // display what messageCount was sent
+      delay(1000);                           // delay so it doesnt transmit a million times
     }
   }
 
-  // if this is crew watch, do crew watch things like send alerts
+  // if this is rxDevice, do Rx things
   else {
-    if(buttonPressD1()) {      // buttonPressD1 simulates sending alert
-      displayDemo2();          // display heat stress alert screen
-      loraTX();
-      delay(4000);             // delay so user can read alert screen
-      displayDemo1();
+    String message = loraRX();                     // get message from loraRx
+    if(message != "Receive failed") {              // if message was recieved
+      messageCount = message.toInt();              // set message count as message num recieved
+      displayLoraRx1(messageCount, loraGetRSSI()); // display what message was recieved and signal strength
+      delay(1000);                                 // delay so it doesnt rx a million times
     }
   }
-  
-   
-  //displayPrint(2, batteryGetPercentageString(), ST77XX_RED);
-  //delay(100);
 
-  //displayPrint(3, opticalGetHeartRateString(), ST77XX_RED);
-  //delay(100);
-
-  //displayPrint(4, temperatureGetTempString(), ST77XX_RED);
-  //delay(100);
 }
