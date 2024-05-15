@@ -6,7 +6,7 @@
 #include "haptic.h"
 #include "power.h"
 #include "lora.h"
-//#include "probe.h"
+#include "probe.h"
 
 bool txDevice = true; // select true if Tx device, false if Rx device
 int messageCount = 0;  // messageCount varible for LoRa testing
