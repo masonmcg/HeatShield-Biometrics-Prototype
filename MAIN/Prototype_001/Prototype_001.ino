@@ -8,8 +8,9 @@
 #include "lora.h"
 #include "probe.h"
 
-bool txDevice = true; // select true if Tx device, false if Rx device
-int messageCount = 0;  // messageCount varible for LoRa testing
+bool probeTest = false; // if selected true, will not do lora stuff at all and only probe stuff
+bool txDevice = true;   // select true if Tx device, false if Rx device
+int messageCount = 0;   // messageCount varible for LoRa testing
 
 void setup() {
   // put your setup code here, to run once:
@@ -24,7 +25,7 @@ void setup() {
   buttonInit();
   //hapticInit();
   //powerInit();
-  //probeInit();
+  probeInit();
   
   // below code chooses starting screen based on which device
   if(txDevice) {
@@ -37,6 +38,22 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+
+  // if probeTest, only do this stuff forever
+  if(probeTest) {
+    while(1) {
+      // Print values to serial monitor
+      Serial.print("Probe 1 Temperature: ");
+      Serial.print(probeReadTemp1());
+      Serial.println(" F");
+
+      Serial.print("Probe 2 Temperature: ");
+      Serial.print(probeReadTemp2(););
+      Serial.println(" F");
+
+      delay(1000); // Wait 1 second before the next reading
+    }
+  }
   
   // if this is txDevice, do Tx things
   if(txDevice) {
