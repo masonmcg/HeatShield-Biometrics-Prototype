@@ -18,7 +18,7 @@ void setup() {
   delay(1000);
   
   displayInit();
-  //batteryInit();
+  batteryInit();
   //opticalInit();
   loraInit();
   //temperatureInit();
@@ -29,10 +29,10 @@ void setup() {
   
   // below code chooses starting screen based on which device
   if(txDevice) {
-    displayLoraTx1(0);
+    displayLoraTx1(0, " ");
   }
   else {
-    displayLoraRx1(0, 0);
+    displayLoraRx1(0, 0, " ");
   }
 }
 
@@ -48,7 +48,7 @@ void loop() {
       Serial.println(" F");
 
       Serial.print("Probe 2 Temperature: ");
-      Serial.print(probeReadTemp2(););
+      Serial.print(probeReadTemp2());
       Serial.println(" F");
 
       delay(1000); // Wait 1 second before the next reading
@@ -61,7 +61,7 @@ void loop() {
       messageCount += 1;                     // increment message count
       String message = String(messageCount); // cast messageCount int to String
       loraTX(message);                       // transmit message String over lora
-      displayLoraTx1(messageCount);          // display what messageCount was sent
+      displayLoraTx1(messageCount, batteryGetPercentageString());          // display what messageCount was sent and battery percentage
       delay(1000);                           // delay so it doesnt transmit a million times
     }
   }
@@ -71,7 +71,7 @@ void loop() {
     String message = loraRX();                     // get message from loraRx
     if(message != "Receive failed") {              // if message was recieved
       messageCount = message.toInt();              // set message count as message num recieved
-      displayLoraRx1(messageCount, loraGetRSSI()); // display what message was recieved and signal strength
+      displayLoraRx1(messageCount, loraGetRSSI(), batteryGetPercentageString()); // display what message was recieved, RSSI, and battery percentage
       delay(1000);                                 // delay so it doesnt rx a million times
     }
   }
